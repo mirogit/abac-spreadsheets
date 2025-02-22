@@ -1,0 +1,117 @@
+MODULE spreadsheet_t()
+VAR
+    attributes:{s_a1,s_a2};
+    role:{developer,tester,analyst,manager};
+    a:{create,read,update,delete};
+    add_in:add_in_t();
+    named_object:named_object_t();
+    worksheet:worksheet_t();
+
+MODULE add_in_t()
+VAR
+    attributes:{a_a1,a_a2};
+    role:{developer,tester,analyst,manager};
+    a:{create,read,update,delete};
+
+MODULE named_object_t()
+VAR
+    attributes:{no_a1,no_a2};
+    role:{developer,tester,analyst,manager};
+    a:{create,read,update,delete};
+
+MODULE worksheet_t()
+VAR
+    attributes:{ws_a1,ws_a2};
+    role:{developer,tester,analyst,manager};
+    a:{create,read,update,delete};
+    table:table_t();
+    cell:cell_t();
+
+MODULE table_t()
+VAR
+    attributes:{t_a1,t_a2};
+    role:{developer,tester,analyst,manager};
+    a:{create,read,update,delete};
+    cell:cell_t();
+
+MODULE cell_t()
+VAR
+    attributes:{c_a1,c_a2};
+    role:{developer,tester,analyst,manager};
+    a:{create,read,update,delete};
+    formula:formula_t();
+
+MODULE formula_t()
+VAR
+    attributes:{f_a1,f_a2};
+    role:{developer,tester,analyst,manager};
+    a:{create,read,update,delete};
+
+
+
+MODULE main
+VAR
+    spreadsheet:spreadsheet_t();
+
+
+ASSIGN
+
+
+next(spreadsheet.add_in.a) :=
+    case
+    (spreadsheet.role=spreadsheet.add_in.role) & (spreadsheet.a=read) & (spreadsheet.add_in.a in {update,create,delete}): read;
+    (spreadsheet.role=spreadsheet.add_in.role) & (spreadsheet.a=update) & (spreadsheet.add_in.a in {read,create,delete}): update;
+    (spreadsheet.role=spreadsheet.add_in.role) & (spreadsheet.a=delete) & (spreadsheet.add_in.a in {read,create,update}): delete;
+    (spreadsheet.role=spreadsheet.add_in.role) & (spreadsheet.a=create) & (spreadsheet.add_in.a in {read,update,delete}): create;
+    TRUE : spreadsheet.add_in.a;
+    esac;
+
+
+next(spreadsheet.named_object.a) :=
+    case
+    (spreadsheet.role=spreadsheet.named_object.role) & (spreadsheet.a=read) & (spreadsheet.named_object.a in {update,create,delete}): read;
+    (spreadsheet.role=spreadsheet.named_object.role) & (spreadsheet.a=update) & (spreadsheet.named_object.a in {read,create,delete}): update;
+    (spreadsheet.role=spreadsheet.named_object.role) & (spreadsheet.a=delete) & (spreadsheet.named_object.a in {read,create,update}): delete;
+    (spreadsheet.role=spreadsheet.named_object.role) & (spreadsheet.a=create) & (spreadsheet.named_object.a in {read,update,delete}): create;
+    TRUE : spreadsheet.named_object.a;
+    esac;
+
+
+next(spreadsheet.worksheet.a) :=
+    case
+    (spreadsheet.role=spreadsheet.worksheet.role) & (spreadsheet.a=read) & (spreadsheet.worksheet.a in {update,create,delete}): read;
+    (spreadsheet.role=spreadsheet.worksheet.role) & (spreadsheet.a=update) & (spreadsheet.worksheet.a in {read,create,delete}): update;
+    (spreadsheet.role=spreadsheet.worksheet.role) & (spreadsheet.a=delete) & (spreadsheet.worksheet.a in {read,create,update}): delete;
+    (spreadsheet.role=spreadsheet.worksheet.role) & (spreadsheet.a=create) & (spreadsheet.worksheet.a in {read,update,delete}): create;
+    TRUE : spreadsheet.worksheet.a;
+    esac;
+
+
+next(spreadsheet.worksheet.table.a) :=
+    case
+    (spreadsheet.role=spreadsheet.worksheet.role) & (spreadsheet.worksheet.role=spreadsheet.worksheet.table.role) & (spreadsheet.a=read) & (spreadsheet.worksheet.a=read) & (spreadsheet.worksheet.table.a in {update,create,delete}): read;
+    (spreadsheet.role=spreadsheet.worksheet.role) & (spreadsheet.worksheet.role=spreadsheet.worksheet.table.role) & (spreadsheet.a=update) & (spreadsheet.worksheet.a=update) & (spreadsheet.worksheet.table.a in {read,create,delete}): update;
+    (spreadsheet.role=spreadsheet.worksheet.role) & (spreadsheet.worksheet.role=spreadsheet.worksheet.table.role) & (spreadsheet.a=delete) & (spreadsheet.worksheet.a=delete) & (spreadsheet.worksheet.table.a in {read,create,update}): delete;
+    (spreadsheet.role=spreadsheet.worksheet.role) & (spreadsheet.worksheet.role=spreadsheet.worksheet.table.role) & (spreadsheet.a=create) & (spreadsheet.worksheet.a=create) & (spreadsheet.worksheet.table.a in {read,update,delete}): create;
+    TRUE : spreadsheet.worksheet.table.a;
+    esac;
+
+next(spreadsheet.worksheet.cell.a) :=
+    case
+    (spreadsheet.role=spreadsheet.worksheet.role) & (spreadsheet.worksheet.role=spreadsheet.worksheet.cell.role) & (spreadsheet.a=read) & (spreadsheet.worksheet.a=read) & (spreadsheet.worksheet.cell.a in {update,create,delete}): read;
+    (spreadsheet.role=spreadsheet.worksheet.role) & (spreadsheet.worksheet.role=spreadsheet.worksheet.cell.role) & (spreadsheet.a=update) & (spreadsheet.worksheet.a=update) & (spreadsheet.worksheet.cell.a in {read,create,delete}): update;
+    (spreadsheet.role=spreadsheet.worksheet.role) & (spreadsheet.worksheet.role=spreadsheet.worksheet.cell.role) & (spreadsheet.a=delete) & (spreadsheet.worksheet.a=delete) & (spreadsheet.worksheet.cell.a in {read,create,update}): delete;
+    (spreadsheet.role=spreadsheet.worksheet.role) & (spreadsheet.worksheet.role=spreadsheet.worksheet.cell.role) & (spreadsheet.a=create) & (spreadsheet.worksheet.a=create) & (spreadsheet.worksheet.cell.a in {read,update,delete}): create;
+    TRUE : spreadsheet.worksheet.cell.a;
+    esac;
+
+
+next(spreadsheet.worksheet.cell.formula.a) :=
+    case
+    (spreadsheet.role=spreadsheet.worksheet.role) & (spreadsheet.worksheet.role=spreadsheet.worksheet.cell.role) & (spreadsheet.worksheet.cell.role=spreadsheet.worksheet.cell.formula.role) & (spreadsheet.a=read) & (spreadsheet.worksheet.a=read) & (spreadsheet.worksheet.cell.a=read) & (spreadsheet.worksheet.cell.formula.a in {update,create,delete}): read;
+    (spreadsheet.role=spreadsheet.worksheet.role) & (spreadsheet.worksheet.role=spreadsheet.worksheet.cell.role) & (spreadsheet.worksheet.cell.role=spreadsheet.worksheet.cell.formula.role) & (spreadsheet.a=update) & (spreadsheet.worksheet.a=update) & (spreadsheet.worksheet.cell.a=update) & (spreadsheet.worksheet.cell.formula.a in {read,create,delete}): update;
+    (spreadsheet.role=spreadsheet.worksheet.role) & (spreadsheet.worksheet.role=spreadsheet.worksheet.cell.role) & (spreadsheet.worksheet.cell.role=spreadsheet.worksheet.cell.formula.role) & (spreadsheet.a=delete) & (spreadsheet.worksheet.a=delete) & (spreadsheet.worksheet.cell.a=delete) & (spreadsheet.worksheet.cell.formula.a in {read,create,update}): delete;
+    (spreadsheet.role=spreadsheet.worksheet.role) & (spreadsheet.worksheet.role=spreadsheet.worksheet.cell.role) & (spreadsheet.worksheet.cell.role=spreadsheet.worksheet.cell.formula.role) & (spreadsheet.a=create) & (spreadsheet.worksheet.a=create) & (spreadsheet.worksheet.cell.a=create) & (spreadsheet.worksheet.cell.formula.a in {read,update,delete}): create;
+    TRUE : spreadsheet.worksheet.cell.formula.a;
+    esac;
+
